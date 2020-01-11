@@ -1,3 +1,4 @@
+// Variable holding the game information
 let game = {
     timeAllowed: 15,
     correctAnswers: 0,
@@ -9,6 +10,8 @@ let game = {
     timeoutID: ""
 }
 
+// Function endGame
+// Called at the end of the game to show the score and enable user to replay
 function endGame() {
     // Clear the interval so there is no more countdown
     clearInterval(game.intervalId);
@@ -26,20 +29,26 @@ function endGame() {
     $("#question").append($("<button>").addClass("start-game").text("Start Over"));
 }
 
+// Function updateTime
+// Used by the interval to update the timer on the page
 function updateTime() {
-    if (game.questionIndex === questions.length) {
+    if (game.questionIndex === questions.length) { //todo: not sure if needed
         endGame();
     } else if (game.time === 0) {
         clearInterval(game.intervalId);
         //  Alert the user that time is up.
         console.log("Time Up!");
         game.unanswered++;
+
+        // If the user didn't answer, they got it wrong
         displayAnswer(false);
     } else {
         $("#time-remaining").text("Time Remaining: " + game.time-- + " seconds");
     }
 }
 
+// Function displayQuestion
+// Displays a question on the page based on the current question index
 function displayQuestion() {
     $(".start-game").remove();
     game.time = game.timeAllowed;
@@ -60,6 +69,8 @@ function displayQuestion() {
 
 }
 
+// Function: resetGame
+// Resets the variables in the game for a fresh one! 
 function resetGame() {
     game.correctAnswers = 0;
     game.incorrectAnswers = 0;
@@ -67,8 +78,11 @@ function resetGame() {
     game.time = 0;
     game.questionIndex = 0;
     clearInterval(game.intervalId);
-    timeoutID = "";
+    clearTimeout(game.timeoutID);
 }
+
+// Function: checkAnswer {string}
+// Checks if an answer is correct or not
 function checkAnswer(answer) {
     clearInterval(game.intervalId);
     if (questions[game.questionIndex].correctAnswer === answer) {
@@ -128,12 +142,12 @@ function nextQuestion() {
 
 $(document).ready(function () {
 
+    // Add the start game button to the page
     $("#main").append($("<button>").addClass("start-game").text("Start Game"));
 
+    // On click to start the game
     $(document).on("click", ".start-game", function () {
-        // Start the game
-        //playGame(0);
-        game.questionIndex = 0;
+        resetGame();
         displayQuestion();
     });
 
