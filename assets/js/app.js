@@ -1,10 +1,10 @@
 let game = {
     timeAllowed: 30000,
-    correctAnswers: -1,
-    incorrectAnswers: -1,
-    unanswered: -1,
-    time: -1,
-    questionIndex: -1,
+    correctAnswers: 0,
+    incorrectAnswers: 0,
+    unanswered: 0,
+    time: 0,
+    questionIndex: 0,
     intervalId: "",
     timeoutID: ""
 }
@@ -22,8 +22,8 @@ function updateTime() {
     } else if (game.time === 0) {
         clearInterval(game.intervalId);
         //  Alert the user that time is up.
-        //alert("Time Up!");
-        nextQuestion();
+        console.log("Time Up!");
+        displayAnswer(false);
     } else {
         $("#time-remaining").text("Time Remaining: " + game.time-- + " seconds");
     }
@@ -49,27 +49,60 @@ function displayQuestion() {
 }
 
 function resetGame() {
-    game.correctAnswers = -1;
-    game.incorrectAnswers = -1;
-    game.unanswered = -1;
-    game.time = -1;
+    game.correctAnswers = 0;
+    game.incorrectAnswers = 0;
+    game.unanswered = 0;
+    game.time = 0;
+    game.questionIndex = 0;
+    clearInterval(game.intervalId);
+    timeoutID = "";
 }
-
-function correctAnswer() {
-
-}
-
-function nextQuestion(answer) {
+function checkAnswer(answer) {
     clearInterval(game.intervalId);
     if (questions[game.questionIndex].correctAnswer === answer) {
-        alert("Correct!");
+        displayAnswer(true);
+    } else {
+        // Incorrect Answer
+        displayAnswer(false);
     }
-    // game.timeoutID = setTimeout(function () {
-    //     //show the correct answer
-    //     alert("test");
-    // }, 5000);
+}
+// Function: displayAnswer
+// If the answer is correct, show a celebration. If it is incorrect notify the user they are bad.
+// After that, move on to the next question in 5 seconds.  
+function displayAnswer(correct) {
+    // Clear the interval to remove the timer
+    clearInterval(game.intervalId);
+    // remove the question displayed
+    $(".question-button").detach();
+    if (correct) {
+        console.log("Correct!");
+        // increment the correct answer variable
+        game.correctAnswers++;
+        // display the answer and gif
+    } else {
+        console.log("Incorrect!");
+        // increment the incorrect answer variable
+        game.incorrectAnswers++;
+        // display the answer and gif
+    }
+    // set a new timer for 5 seconds then move to the next question
+    game.timeoutID = setTimeout(nextQuestion, 5000);
+}
+
+// Function: nextQuestion
+// Moves to the next question in the list. If there are no more questions it resets the game!
+function nextQuestion() {
+    // Clear the timeout that was set by displayAnswer. Clear the interval as well just in case.
+    clearTimeout(game.timeoutID);
+    clearInterval(game.intervalId);
+    // Go to the next question
     game.questionIndex++;
-    displayQuestion();
+    // If we're on the last question, the game is over. 
+    if (game.questionIndex >= questions.length) {
+        resetGame();
+    } else {  // Otherwise display the next question
+        displayQuestion();
+    }
 }
 
 
@@ -96,6 +129,6 @@ $(document).ready(function () {
 
     $(document).on("click", ".question-button", function () {
         // check for correct answer
-        nextQuestion($(this).attr("data-answer"));
+        checkAnswer($(this).attr("data-answer"));
     });
 });
