@@ -5,11 +5,15 @@ let game = {
     unanswered: -1,
     time: -1,
     questionIndex: -1,
-    intervalId: ""
+    intervalId: "",
+    timeoutID: ""
 }
 
 function endGame() {
+    // Clear the interval so there is no more countdown
     clearInterval(game.intervalId);
+
+    // Show the final score page
 }
 
 function updateTime() {
@@ -18,7 +22,7 @@ function updateTime() {
     } else if (game.time === 0) {
         clearInterval(game.intervalId);
         //  Alert the user that time is up.
-        alert("Time Up!");
+        //alert("Time Up!");
         nextQuestion();
     } else {
         $("#time-remaining").text("Time Remaining: " + game.time-- + " seconds");
@@ -33,6 +37,15 @@ function displayQuestion() {
     game.intervalId = setInterval(updateTime, 1000);
 
     $("#question").text(questions[game.questionIndex].question);
+    questions[game.questionIndex].answers.forEach(function (element, index) {
+        $("#question").append($("<br>"));
+        var item = $("<button>").addClass("question-button");
+        item.attr("data-index", index);
+        item.attr("data-answer", element);
+        item.text(element);
+        $("#question").append(item);
+    });
+
 }
 
 function resetGame() {
@@ -42,22 +55,33 @@ function resetGame() {
     game.time = -1;
 }
 
-function nextQuestion() {
+function correctAnswer() {
+
+}
+
+function nextQuestion(answer) {
     clearInterval(game.intervalId);
+    if (questions[game.questionIndex].correctAnswer === answer) {
+        alert("Correct!");
+    }
+    // game.timeoutID = setTimeout(function () {
+    //     //show the correct answer
+    //     alert("test");
+    // }, 5000);
     game.questionIndex++;
     displayQuestion();
 }
 
 
-function playGame(index) {
-    resetGame();
-    $(".start-game").remove();
-    game.time = 5;
-    game.questionIndex = 0;
-    clearInterval(game.intervalId);
-    // Start a timer and update the timer value
-    game.intervalId = setInterval(updateTime, 1000);
-}
+// function playGame(index) {
+//     resetGame();
+//     $(".start-game").remove();
+//     game.time = 5;
+//     game.questionIndex = 0;
+//     clearInterval(game.intervalId);
+//     // Start a timer and update the timer value
+//     game.intervalId = setInterval(updateTime, 1000);
+// }
 
 $(document).ready(function () {
 
@@ -68,5 +92,10 @@ $(document).ready(function () {
         //playGame(0);
         game.questionIndex = 0;
         displayQuestion();
+    });
+
+    $(document).on("click", ".question-button", function () {
+        // check for correct answer
+        nextQuestion($(this).attr("data-answer"));
     });
 });

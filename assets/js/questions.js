@@ -1,26 +1,20 @@
 const questions = [
     {
         question: "What a Test",
-        answer: "This is an answer",
-        choice1: "wrong1",
-        choice2: "wrong2",
-        choice3: "wrong3",
+        answers: ["This is an answer", "wrong1", "wrong2", "wrong3"],
+        correctAnswer: "wrong1",
         image: ""
     },
     {
         question: "What a Question2",
-        answer: "This is an answer",
-        choice1: "wrong1",
-        choice2: "wrong2",
-        choice3: "wrong3",
+        answers: ["This is an answer", "hmm", "hmm", "wr33ong3"],
+        correctAnswer: "wr33ong3",
         image: ""
     },
     {
         question: "What a Question3",
-        answer: "This is an answer",
-        choice1: "wrong1",
-        choice2: "wrong2",
-        choice3: "wrong3",
+        answers: ["This is an answer", "wrong1", "wrong2", "wrong3"],
+        correctAnswer: "wrong2",
         image: ""
     }
 ]
