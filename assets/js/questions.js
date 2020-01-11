@@ -12,9 +12,21 @@ const questions = [
         image: "https://media.giphy.com/media/xUOxeTxr8IruaTTK7u/giphy.gif"
     },
     {
-        question: "What is ",
-        answers: ["This is an answer", "Correct", "wrong2", "wrong3"],
-        correctAnswer: "Correct",
-        image: ""
+        question: "The state of Texas is one of only seven US states that do not have a what?",
+        answers: ["Gift Tax", "Sales Tax", "Property Tax", "State Income Tax"],
+        correctAnswer: "State Income Tax",
+        image: "https://media.giphy.com/media/JpG2A9P3dPHXaTYrwu/source.gif"
+    },
+    {
+        question: "What is the nickname for the state of Texas?",
+        answers: ["Show Me State", "The Lone Star State", "Golden State", "The Last Frontier"],
+        correctAnswer: "The Lone Star State",
+        image: "https://media.giphy.com/media/4uytPI1hLsA12/source.gif"
+    },
+    {
+        question: "Lady Bird Johnson, worked to draw attention to Texas what?",
+        answers: ["Wildflowers", "Grakles", "Stray Dogs", "Beaches"],
+        correctAnswer: "Wildflowers",
+        image: "https://media.giphy.com/media/5jWfG61gJtSSOrueSD/giphy.gif"
     }
 ]

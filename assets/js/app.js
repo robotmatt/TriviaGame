@@ -14,6 +14,16 @@ function endGame() {
     clearInterval(game.intervalId);
 
     // Show the final score page
+    $(".question-button").detach();
+    $("#question").html("");
+
+    $("#question").append($("<div>").text("All done! Here's how you did:"));
+    $("#question").append($("<div>").text("Correct Answers: " + game.correctAnswers));
+    $("#question").append($("<div>").text("Incorrect Answers: " + game.incorrectAnswers));
+    $("#question").append($("<div>").text("Unanswered: " + game.unanswered));
+
+    // Add start-over button
+    $("#question").append($("<button>").addClass("start-game").text("Start Over"));
 }
 
 function updateTime() {
@@ -23,6 +33,7 @@ function updateTime() {
         clearInterval(game.intervalId);
         //  Alert the user that time is up.
         console.log("Time Up!");
+        game.unanswered++;
         displayAnswer(false);
     } else {
         $("#time-remaining").text("Time Remaining: " + game.time-- + " seconds");
@@ -39,9 +50,10 @@ function displayQuestion() {
     $("#question").text(questions[game.questionIndex].question);
     questions[game.questionIndex].answers.forEach(function (element, index) {
         $("#question").append($("<br>"));
-        var item = $("<button>").addClass("question-button");
+        var item = $("<button>");
         item.attr("data-index", index);
         item.attr("data-answer", element);
+        item.attr("class", "question-button m-2 btn-primary");
         item.text(element);
         $("#question").append(item);
     });
@@ -75,6 +87,7 @@ function displayAnswer(correct) {
     // remove the question displayed
     $(".question-button").detach();
     $("#question").html("");
+    $("#time-remaining").html("");
     if (correct) {
         console.log("Correct!");
         // increment the correct answer variable
@@ -87,7 +100,6 @@ function displayAnswer(correct) {
         game.incorrectAnswers++;
         // display the answer and gif
         headlineText = $("<h4>").text("Sorry that's not correct :(");
-        
     }
     var image = $("<img>").attr("src", questions[game.questionIndex].image);
     var answer = $("<h5>").text("The answer is: " + questions[game.questionIndex].correctAnswer)
@@ -108,22 +120,11 @@ function nextQuestion() {
     game.questionIndex++;
     // If we're on the last question, the game is over. 
     if (game.questionIndex >= questions.length) {
-        resetGame();
+        endGame();
     } else {  // Otherwise display the next question
         displayQuestion();
     }
 }
-
-
-// function playGame(index) {
-//     resetGame();
-//     $(".start-game").remove();
-//     game.time = 5;
-//     game.questionIndex = 0;
-//     clearInterval(game.intervalId);
-//     // Start a timer and update the timer value
-//     game.intervalId = setInterval(updateTime, 1000);
-// }
 
 $(document).ready(function () {
 
