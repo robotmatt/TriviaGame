@@ -1,5 +1,5 @@
 let game = {
-    timeAllowed: 30000,
+    timeAllowed: 15,
     correctAnswers: 0,
     incorrectAnswers: 0,
     unanswered: 0,
@@ -31,7 +31,7 @@ function updateTime() {
 
 function displayQuestion() {
     $(".start-game").remove();
-    game.time = 5;
+    game.time = game.timeAllowed;
     clearInterval(game.intervalId);
     // Start a timer and update the timer value
     game.intervalId = setInterval(updateTime, 1000);
@@ -74,17 +74,26 @@ function displayAnswer(correct) {
     clearInterval(game.intervalId);
     // remove the question displayed
     $(".question-button").detach();
+    $("#question").html("");
     if (correct) {
         console.log("Correct!");
         // increment the correct answer variable
         game.correctAnswers++;
         // display the answer and gif
+        headlineText = $("<h3>").text("That's correct!");
     } else {
         console.log("Incorrect!");
         // increment the incorrect answer variable
         game.incorrectAnswers++;
         // display the answer and gif
+        headlineText = $("<h4>").text("Sorry that's not correct :(");
+        
     }
+    var image = $("<img>").attr("src", questions[game.questionIndex].image);
+    var answer = $("<h5>").text("The answer is: " + questions[game.questionIndex].correctAnswer)
+    $("#question").append(headlineText);
+    $("#question").append(answer);
+    $("#question").append(image);
     // set a new timer for 5 seconds then move to the next question
     game.timeoutID = setTimeout(nextQuestion, 5000);
 }
