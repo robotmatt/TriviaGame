@@ -1,42 +1,56 @@
 let game = {
-    countdown: 30000,
+    timeAllowed: 30000,
     correctAnswers: -1,
     incorrectAnswers: -1,
     unanswered: -1,
+    time: -1,
+    intervalId: ""
+}
 
-    displayQuestion: function (questionNumber) {
-        return questionNumber;
-    },
+function displayQuestion(questionNumber) {
+    $("#question").text(questions[questionNumber].question);
+    return questionNumber;
+}
 
-    resetGame: function () {
-        this.correctAnswers = -1;
-        this.incorrectAnswers = -1;
-        this.unanswered = -1;
-    },
+function resetGame() {
+    game.correctAnswers = -1;
+    game.incorrectAnswers = -1;
+    game.unanswered = -1;
+    game.time = -1;
+}
 
-    updateTime: function(){
-        
-    },
+function updateTime() {
 
-    playGame: function () {
-        this.resetGame();
-        questions.forEach(function (item, index) {
-            // Display the question
-            //this.displayQuestion(index);
-            // Start a timer and update the timer value
-            intervalId = setInterval(this.updateTime, 1000);
-            
-        })
+    $("#time-remaining").text("Time Remaining: " + --game.time + " seconds");
+    if (game.time === 0) {
+
+        clearInterval(game.intervalId);
+        //  Alert the user that time is up.
+        alert("Time Up!");
     }
+}
 
+function playGame() {
+    resetGame();
+    $(".start-game").remove();
+    questions.forEach(function (item, index) {
+        // Display the question
+        displayQuestion(index);
+        game.time = 5;
+        clearInterval(game.intervalId);
+        // Start a timer and update the timer value
+        game.intervalId = setInterval(updateTime, 1000);
 
+    })
 }
 
 $(document).ready(function () {
 
+    $("#main").append($("<button>").addClass("start-game").text("Start Game"));
 
-    $("#start-game").on("click", function () {
+    $(document).on("click", ".start-game", function () {
+
         // Start the game
-        game.playGame();
+        playGame();
     });
 });
